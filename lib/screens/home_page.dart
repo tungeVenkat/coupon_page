@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:spacez_coupon_task/controllers/home_page_controller.dart';
 import 'package:spacez_coupon_task/widgets/coupon_card.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final HomePageController controller = Get.put(HomePageController());
 
   static const Color _kAccent = Color(0xFFC16B3E);
   static const Color _kBannerGreen = Color(0xFF2E7D32);
@@ -18,7 +21,7 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12.0),
-          child: Image.asset('assets/logo.png', height: 24, width: 114),
+          child: Image.asset('assets/logo.png', height: 30, width: 114),
         ),
         actions: [
           Padding(
@@ -37,13 +40,11 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header row directly below appbar
+            // Header row
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
-              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -56,22 +57,10 @@ class HomePage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(0, 0),
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back,
-                      size: 24,
-                      color: Colors.black,
-                    ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                   ),
-                  const SizedBox(width: 8),
                   const Text(
                     'Coupons',
                     style: TextStyle(
@@ -84,12 +73,10 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            // Coupon cards section
+            // Coupons section
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
-              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Column(
                 children: [
                   CouponCard(
@@ -98,26 +85,22 @@ class HomePage extends StatelessWidget {
                     description:
                         '15% off when you book for 5 days or more and 20% off when you book for 30 days or more.',
                     color: _kAccent,
-                    onApply: () {
-                      debugPrint('LONGSTAY coupon applied');
-                    },
-                    onReadMore: () {
-                      debugPrint('Read more clicked for LONGSTAY');
-                    },
+                    onApply: () => controller.showSuccessMessage(
+                        context, 'Coupon applied successfully!'),
+                    onReadMore: () => controller.showSuccessMessage(
+                        context, 'Opening coupon details...'),
                   ),
                   const SizedBox(height: 12),
                   CouponCard(
-                    price: '₹6,900',
-                    title: 'LONGSTAY',
+                    price: '₹3,000',
+                    title: 'EARLYBIRD',
                     description:
-                        '15% off when you book for 5 days or more and 20% off when you book for 30 days or more.',
+                        '10% off on bookings made 30 days before the check-in date.',
                     color: _kAccent,
-                    onApply: () {
-                      debugPrint('LONGSTAY coupon applied');
-                    },
-                    onReadMore: () {
-                      debugPrint('Read more clicked for LONGSTAY');
-                    },
+                    onApply: () => controller.showSuccessMessage(
+                        context, 'Coupon applied successfully!'),
+                    onReadMore: () => controller.showSuccessMessage(
+                        context, 'Opening coupon details...'),
                   ),
                 ],
               ),
@@ -125,38 +108,31 @@ class HomePage extends StatelessWidget {
 
             // Payment offers
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
-              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Payment Offers:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
+                  const Text(
+                    'Payment Offers:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 12),
                   CouponCard(
-                    price: '₹6,900',
-                    title: 'LONGSTAY',
+                    price: '₹2,000',
+                    title: 'PAYZAPP',
                     description:
-                        '15% off when you book for 5 days or more and 20% off when you book for 30 days or more.',
+                        'Get flat ₹200 cashback on payments made using Payzapp wallet.',
                     color: _kAccent,
-                    onApply: () {
-                      debugPrint('LONGSTAY coupon applied');
-                    },
-                    onReadMore: () {
-                      debugPrint('Read more clicked for LONGSTAY');
-                    },
+                    onApply: () => controller.showSuccessMessage(
+                        context, 'Offer applied successfully!'),
+                    onReadMore: () => controller.showSuccessMessage(
+                        context, 'Opening offer details...'),
                   ),
-                  // Add extra bottom spacing so last card isn't hidden behind sticky bottom
                   const SizedBox(height: 120),
                 ],
               ),
@@ -169,31 +145,30 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Green reward banner (sticky)
+          // Reward banner
           Container(
             width: double.infinity,
             color: _kBannerGreen,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: const Text(
-              'Book now & Unlock exclusive rewards!',
+              'Book now & unlock exclusive rewards!',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                
                 fontSize: 14,
               ),
             ),
           ),
 
-          // Price/reserve bar
+          // Price bar
           Material(
             elevation: 8,
             child: Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  // Price details (left side)
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,34 +195,40 @@ class HomePage extends StatelessWidget {
                             SizedBox(width: 6),
                             Text(
                               'for 2 nights',
-                              style: TextStyle(fontSize: 13, color: Colors.black54),
+                              style: TextStyle(
+                                  fontSize: 13, color: Colors.black54),
                             ),
                           ],
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '24 Apr - 26 Apr | 8 guests ',
-                          style: TextStyle(fontSize: 12, color: Colors.black54,decoration: TextDecoration.underline),
+                          '24 Apr - 26 Apr | 8 guests',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ],
                     ),
                   ),
-
-                  // Reserve button (right side)
                   ElevatedButton(
-                    onPressed: () {
-                      debugPrint('Reserve clicked');
-                    },
+                    onPressed: () => controller.showSuccessMessage(
+                        context, 'Reservation successful!'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _kAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                     ),
                     child: const Text(
                       'Reserve',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: Colors.white,
+                        
+                      ),
                     ),
                   ),
                 ],

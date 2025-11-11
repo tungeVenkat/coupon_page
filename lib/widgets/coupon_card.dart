@@ -27,150 +27,128 @@ class CouponCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final double holeSpacing = _kCardHeight / (_kHoleCount + 1);
 
-    return Material(
-      elevation: 8,
-      borderRadius: BorderRadius.circular(12.0),
-      child: Container(
-        height: _kCardHeight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Stack(
-          
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        child: Row(
           children: [
-            
-            // Main layout
-            Row(
-              children: [
-                // Left price strip
-                Container(
-                  width: _kValuePanelWidth,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    color: color,
-                    
-                  ),
-                  child: Center(
-                    child: RotatedBox(
-                      quarterTurns: -1,
-                      child: Text(
-                        price,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+            // Left color strip
+            Container(
+              width: _kValuePanelWidth,
+              height: _kCardHeight,
+              color: color,
+              child: Center(
+                child: RotatedBox(
+                  quarterTurns: -1,
+                  child: Text(
+                    price,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
                     ),
                   ),
                 ),
+              ),
+            ),
 
-                // Right details panel
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(12.0),
-                        bottomRight: Radius.circular(12.0),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            // Right section
+            Expanded(
+              child: Container(
+                height: _kCardHeight,
+                color: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Title & Apply
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Title + Apply button
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF333333),
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: onApply,
-                              icon: Icon(
-                                Icons.sell_outlined,
-                                size: 16,
-                                color: color,
-                              ),
-                              label: Text(
-                                'Apply',
-                                style: TextStyle(
-                                  color: color,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // Description
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
-                          child: Text(
-                            description,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey,
-                              height: 1.4,
-                            ),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF333333),
                           ),
                         ),
-
-                        // Read More link
-                        GestureDetector(
-                          onTap: onReadMore,
-                          child: Text(
-                            'Read more',
+                        TextButton.icon(
+                          onPressed: onApply,
+                          icon: Icon(Icons.sell_outlined, color: color, size: 18),
+                          label: Text(
+                            'Apply',
                             style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
+                              color: color,
                               fontWeight: FontWeight.w600,
-                              decorationThickness: 0.1,
-                              decorationColor: color,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
+
+                    // Description
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                        height: 1.4,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    // Read More
+                    GestureDetector(
+                      onTap: onReadMore,
+                      child: const Text(
+                        'Read more',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
 
-            // Perforated holes (visual effect)
-            Positioned(
-              left: _kValuePanelWidth - _kHoleRadius,
-              top: 0,
-              bottom: 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(_kHoleCount, (index) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      top: index == 0 ? holeSpacing - _kHoleRadius : 0,
-                      bottom: index == _kHoleCount - 1
-                          ? holeSpacing - _kHoleRadius
-                          : 0,
-                    ),
-                    child: Container(
+            // Perforated holes
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(_kHoleCount, (i) {
+                    return Container(
                       width: _kHoleRadius * 2,
                       height: _kHoleRadius * 2,
+                      margin: EdgeInsets.symmetric(
+                          vertical: holeSpacing / (_kHoleCount + 1)),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
             ),
           ],

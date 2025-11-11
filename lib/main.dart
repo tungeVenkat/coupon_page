@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
